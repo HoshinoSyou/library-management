@@ -10,12 +10,6 @@ type Tag struct {
 	TagName string `json:"tagName"`
 }
 
-type BookTag struct {
-	gorm.Model
-	BookId uint `json:"bookId"`
-	TagId  uint `json:"tagId"`
-}
-
 func InsertTag(tagName string) bool {
 	var t Tag
 	dao.DB.Where("tag_name = ?", tagName).First(&t)
@@ -38,15 +32,17 @@ func TagList() (tags []Tag) {
 }
 
 func QueryTagWithId(tagId uint) (t Tag) {
-	dao.DB.Where("id = ?", tagId).First(&t)
+	dao.DB.Table("tags").Where("id = ?", tagId).First(&t)
 	return
 }
 
 func QueryTagWithTagName(tagName string) (t Tag) {
-	dao.DB.Where("tagName = ?", tagName).First(&t)
+	dao.DB.Table("tags").Where("tagName = ?", tagName).First(&t)
 	return
 }
 
 func QueryTagWithBook(bookId uint) []Tag {
-	
+	var tags []Tag
+	dao.DB.Table("book").Where("book_id = ?", bookId).Find(&tags)
+	return tags
 }

@@ -15,20 +15,23 @@ func Entrance() {
 		usr.GET("/login", controller.UserLogin)
 		usr.POST("/register", controller.UserRegister)
 		usr.Use(jwt.CheckToken())
-		usr.PUT("/changePwd", controller.UserChangePwd)
-		usr.GET("/information")
+		usr.PATCH("/changePwd", controller.UserChangePwd)
+		usr.DELETE("/logout", controller.UserLogout)
+		usr.GET("/information", controller.UserInformation)
+		usr.PUT("/information/change", controller.UserInformationChange)
 	}
 	mng := routine.Group("/manager")
 	{
-		mng.GET("/login")
-		mng.POST("/register")
+		mng.GET("/login", controller.ManagerLogin)
 		mng.Use(jwt.CheckToken())
-		mng.PUT("/changePwd")
-		mng.GET("/information")
+		mng.POST("/register", controller.ManagerRegister)
+		mng.PUT("/changePwd", controller.ManagerChangePwd)
+		mng.GET("/information", controller.ManagerInfQuery)
 	}
 	book := routine.Group("/book")
 	{
-		book.GET("/detail")
+		book.GET("/detail", controller.Detail)
+		book.Use(jwt.CheckToken())
 		book.POST("/rent")
 		book.POST("/return")
 	}

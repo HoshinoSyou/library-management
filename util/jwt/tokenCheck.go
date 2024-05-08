@@ -37,6 +37,7 @@ func CheckToken() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
+		// TODO:添加签名校验
 		_, err = base64.StdEncoding.DecodeString(split[2])
 		if err != nil {
 			err = errors.New("signature解析错误")
@@ -53,7 +54,9 @@ func CheckToken() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
-		ctx.Set("username", payload.Username)
+		ctx.Set("username", payload.Sub)
+		ctx.Set("userid", payload.Uid)
+		ctx.Set("usertype", payload.Typ)
 		ctx.Next()
 	}
 }

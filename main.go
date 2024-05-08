@@ -1,13 +1,13 @@
 package main
 
 import (
-	"math"
+	"library-management/cmd"
+	"library-management/dao"
 )
 
 func main() {
-	//defer dao.DB.Close()
-	//cmd.Entrance()
-	maximumCount([]int{-2, -1, -1, 0, 1, 2, 3})
+	defer dao.DB.Close()
+	cmd.Entrance()
 }
 
 //func maximumCount(nums []int) int {

@@ -8,22 +8,33 @@ import (
 type Book struct {
 	gorm.Model
 	Name   string `json:"name"`
+	Isbn   string `json:"isbn"`
 	Amount uint   `json:"amount"`
 	Author string `json:"author"`
 	Brief  string `json:"brief"`
+	Tags   []Tag  `json:"tags" gorm:"many2many:books_tags"`
 }
 
-func InsertBook(name string, amount uint, author string, brief string) bool {
+type Rent struct {
+	gorm.Model
+	BookId   uint   `json:"bookId"`
+	BookName string `json:"bookName"`
+	UserId   uint   `json:"userId"`
+}
+
+func InsertBook(name string, isbn string, amount uint, author string, brief string, tags []Tag) bool {
 	dao.DB.AutoMigrate(&Book{})
 	var book Book
 	var b = Book{
 		Model:  gorm.Model{},
 		Name:   name,
+		Isbn:   isbn,
 		Amount: amount,
 		Author: author,
 		Brief:  brief,
+		Tags:   tags,
 	}
-	dao.DB.Where("name = ?", name).First(&book)
+	dao.DB.Table("books").Where("name = ?", name).First(&book)
 	if book.ID > 0 {
 		return false
 	}
@@ -32,16 +43,16 @@ func InsertBook(name string, amount uint, author string, brief string) bool {
 }
 
 func QueryBookByID(id uint) (b Book) {
-	dao.DB.Where("id = ?", id).First(&b)
+	dao.DB.Table("books").Where("id = ?", id).First(&b)
 	return
 }
 
 func QueryBookByName(name string) (b []Book) {
-	dao.DB.Where("name LIKE ?", name).Find(&b)
+	dao.DB.Table("books").Where("name LIKE ?", name).Find(&b)
 	return
 }
 
 func QueryBookByAuthor(author string) (b []Book) {
-	dao.DB.Where("author LIKE ?", author).Find(&b)
+	dao.DB.Table("books").Where("author LIKE ?", author).Find(&b)
 	return
 }

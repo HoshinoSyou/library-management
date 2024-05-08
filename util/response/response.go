@@ -9,14 +9,16 @@ import (
 
 const (
 	ok  = 100
-	OkT = 101
-	OkD = 102
+	okT = 101
+	okD = 102
+
+	fail = 201
 )
 
 // Ok 成功
 func Ok(ctx *gin.Context, msg string) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":    100,
+		"code":    ok,
 		"info":    "success",
 		"message": msg,
 	})
@@ -25,7 +27,7 @@ func Ok(ctx *gin.Context, msg string) {
 // OkWithToken 成功 返回带有token的响应
 func OkWithToken(ctx *gin.Context, msg string, token string) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":    101,
+		"code":    okT,
 		"info":    "success",
 		"message": msg,
 		"token":   token,
@@ -35,7 +37,7 @@ func OkWithToken(ctx *gin.Context, msg string, token string) {
 // OkWithData 成功 返回带有data数据的响应
 func OkWithData(ctx *gin.Context, msg string, data interface{}) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":    102,
+		"code":    okD,
 		"info":    "success",
 		"message": msg,
 		"data":    data,
@@ -45,7 +47,7 @@ func OkWithData(ctx *gin.Context, msg string, data interface{}) {
 // Error 错误 返回带有error的响应
 func Error(ctx *gin.Context, msg string, err error) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"code":    201,
+		"code":    fail,
 		"info":    "failure",
 		"message": msg,
 		"error":   err,
